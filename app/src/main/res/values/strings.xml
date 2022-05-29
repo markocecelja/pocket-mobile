@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Pocket</string>
+    <string name="iv_logo_description">App logo</string>
+    <string name="loginFragment_signUp_tv">Nemate korisnički račun?\nRegistriraj se</string>
+    <string name="et_username_hint">Korisničko ime</string>
+    <string name="et_password_hint">Lozinka</string>
+    <string name="mb_login_text">Prijavi se</string>
+    <string name="register_et_name_hint">Ime</string>
+    <string name="register_et_surname_hint">Prezime</string>
+    <string name="register_et_username_hint">Korisničko ime</string>
+    <string name="register_et_password_hint">Lozinka</string>
+    <string name="register_et_password_confirm_hint">Ponovno unesite lozinku</string>
+    <string name="register_b_register_text">Registriraj se</string>
+    <string name="mandatory_field">Ovo polje je obavezno!</string>
 </resources>
