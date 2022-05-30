@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary_app_color">#6AB446</color>
+    <color name="message_left">#FFBB73</color>
+    <color name="message_right">#0099CC</color>
 </resources>

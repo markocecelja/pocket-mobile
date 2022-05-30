@@ -60,7 +60,7 @@ class LoginFragment : Fragment() {
             loginBinding.etPassword.text.toString()
         )
 
-        loadingViewModel.loginUser(requireActivity(), userLoginRequestDTO)
+        loadingViewModel.loginUser(userLoginRequestDTO)
     }
 
     private fun validateInputFields(): Boolean {

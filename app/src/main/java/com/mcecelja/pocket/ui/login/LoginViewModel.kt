@@ -1,28 +1,27 @@
 package com.mcecelja.pocket.ui.login
 
-import android.app.Activity
-import android.content.Intent
 import android.view.View
 import android.widget.Toast
-import com.mcecelja.pocket.ui.pocket.PocketActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.mcecelja.pocket.Pocket
-import com.mcecelja.pocket.data.PreferenceManager
 import com.mcecelja.pocket.data.dto.ResponseMessage
 import com.mcecelja.pocket.data.dto.users.RegisterRequestDTO
 import com.mcecelja.pocket.data.dto.users.UserLoginRequestDTO
 import com.mcecelja.pocket.data.dto.users.UserLoginResponseDTO
-import com.mcecelja.pocket.enums.PreferenceEnum
 import com.mcecelja.pocket.services.AuthenticationService
-import com.mcecelja.pocket.ui.LoadingViewModel
-import com.mcecelja.pocket.utils.ErrorUtil
+import com.mcecelja.pocket.ui.BaseViewModel
 import com.mcecelja.pocket.utils.RestUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginViewModel : LoadingViewModel() {
+class LoginViewModel : BaseViewModel() {
 
-    fun loginUser(activity: Activity, userLoginRequestDTO: UserLoginRequestDTO) {
+    private val _token: MutableLiveData<String> = MutableLiveData<String>()
+    val token: LiveData<String> = _token
+
+    fun loginUser(userLoginRequestDTO: UserLoginRequestDTO) {
 
         val apiCall =
             RestUtil.createService(AuthenticationService::class.java).loginUser(userLoginRequestDTO)
@@ -40,19 +39,9 @@ class LoginViewModel : LoadingViewModel() {
                 if (response.isSuccessful) {
 
                     if (response.body()?.errorCode != null) {
-                        ErrorUtil.showAlertMessageForErrorCode(
-                            response.body()!!.errorCode,
-                            activity
-                        )
-
-                        ErrorUtil.handleError(response.body()!!.errorCode, activity)
+                        setError(response.body()!!.errorCode)
                     } else {
-                        PreferenceManager.savePreference(
-                            PreferenceEnum.TOKEN,
-                            response.body()?.payload?.jwt
-                        )
-                        val intent = Intent(Pocket.application, PocketActivity::class.java)
-                        activity.startActivity(intent)
+                        _token.postValue(response.body()?.payload?.jwt)
                     }
                 }
             }
@@ -73,7 +62,7 @@ class LoginViewModel : LoadingViewModel() {
         })
     }
 
-    fun registerUser(activity: Activity, registerRequestDTO: RegisterRequestDTO) {
+    fun registerUser(registerRequestDTO: RegisterRequestDTO) {
 
         val apiCall =
             RestUtil.createService(AuthenticationService::class.java)
@@ -87,15 +76,9 @@ class LoginViewModel : LoadingViewModel() {
                 if (response.isSuccessful) {
 
                     if (response.body()?.errorCode != null) {
-                        ErrorUtil.showAlertMessageForErrorCode(
-                            response.body()!!.errorCode,
-                            activity
-                        )
-
-                        ErrorUtil.handleError(response.body()!!.errorCode, activity)
+                        setError(response.body()!!.errorCode)
                     } else {
                         loginUser(
-                            activity,
                             UserLoginRequestDTO(
                                 registerRequestDTO.username,
                                 registerRequestDTO.password

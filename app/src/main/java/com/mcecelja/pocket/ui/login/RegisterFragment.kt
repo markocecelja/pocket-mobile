@@ -47,7 +47,7 @@ class RegisterFragment : Fragment() {
             binding.etPasswordConfirm.text.toString()
         )
 
-        loadingViewModel.registerUser(requireActivity(), registerRequestDTO)
+        loadingViewModel.registerUser(registerRequestDTO)
     }
 
     private fun validateInputFields(): Boolean {

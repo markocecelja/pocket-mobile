@@ -12,4 +12,7 @@
     <string name="register_et_password_confirm_hint">Ponovno unesite lozinku</string>
     <string name="register_b_register_text">Registriraj se</string>
     <string name="mandatory_field">Ovo polje je obavezno!</string>
+    <string name="iv_chat_description">Chat icon</string>
+    <string name="et_message_hint">Unesite poruku</string>
+    <string name="ib_send_description">Press to send</string>
 </resources>
