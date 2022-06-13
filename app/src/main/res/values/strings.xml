@@ -15,4 +15,7 @@
     <string name="iv_chat_description">Chat icon</string>
     <string name="et_message_hint">Unesite poruku</string>
     <string name="ib_send_description">Press to send</string>
+    <string name="iv_post_description">Post icon</string>
+    <string name="et_search_hint">Upišite tekst za pretraživanje</string>
+    <string name="til_category_hint">Izaberite kategoriju</string>
 </resources>

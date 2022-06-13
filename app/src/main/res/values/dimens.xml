@@ -5,6 +5,7 @@
     <dimen name="margin_large">24dp</dimen>
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
     <dimen name="title_medium">20sp</dimen>
     <dimen name="title_large">30sp</dimen>
     <dimen name="text">20sp</dimen>

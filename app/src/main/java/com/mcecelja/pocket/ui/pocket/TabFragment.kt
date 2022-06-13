@@ -37,6 +37,7 @@ class TabFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val pageAdapter = PageAdapter(requireActivity())
+        pageAdapter.addFragment(TabFragmentEnum.POSTS)
         pageAdapter.addFragment(TabFragmentEnum.CHAT)
 
         viewPager = tabFragmentBinding.viewPager

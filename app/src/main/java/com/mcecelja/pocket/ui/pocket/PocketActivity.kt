@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.mcecelja.pocket.Pocket
 import com.mcecelja.pocket.R
 import com.mcecelja.pocket.data.PreferenceManager
 import com.mcecelja.pocket.databinding.ActivityPocketBinding
@@ -61,6 +62,8 @@ class PocketActivity : AppCompatActivity() {
                     .commit()
             }
         }
+
+        activityPocketBinding.ibOff.setOnClickListener { logOut() }
     }
 
     override fun onBackPressed() {
@@ -69,7 +72,7 @@ class PocketActivity : AppCompatActivity() {
         }
     }
 
-    fun setupLoadingScreen(visibility: Int) {
+    private fun setupLoadingScreen(visibility: Int) {
         activityPocketBinding.rlMain.visibility = visibility
 
         if (visibility == View.VISIBLE) {
@@ -86,5 +89,12 @@ class PocketActivity : AppCompatActivity() {
 
             pocketViewModel.setAllowBack(true)
         }
+    }
+
+    private fun logOut() {
+        PreferenceManager.removePreference(PreferenceEnum.TOKEN)
+        val intent = Intent(Pocket.application, LoginActivity::class.java)
+        this.startActivity(intent)
+        this.finish()
     }
 }

@@ -39,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
             )
             val intent = Intent(Pocket.application, PocketActivity::class.java)
             this.startActivity(intent)
+            this.finish()
         })
 
         loginViewModel.error.observe(
