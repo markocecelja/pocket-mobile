@@ -10,6 +10,7 @@ import com.mcecelja.pocket.data.PreferenceManager
 import com.mcecelja.pocket.data.dto.ResponseMessage
 import com.mcecelja.pocket.data.dto.chat.ChatDTO
 import com.mcecelja.pocket.data.dto.chat.MessageDTO
+import com.mcecelja.pocket.data.dto.post.PostDTO
 import com.mcecelja.pocket.enums.PreferenceEnum
 import com.mcecelja.pocket.services.MessageService
 import com.mcecelja.pocket.ui.BaseViewModel
@@ -23,20 +24,23 @@ class MessagesViewModel : BaseViewModel() {
     private val _chat: MutableLiveData<ChatDTO> = MutableLiveData<ChatDTO>()
     val chat: LiveData<ChatDTO> = _chat
 
+    private val _post: MutableLiveData<PostDTO> = MutableLiveData<PostDTO>()
+    val post: LiveData<PostDTO> = _post
+
     private val _messages: MutableLiveData<List<MessageDTO>> = MutableLiveData<List<MessageDTO>>()
     val messages: LiveData<List<MessageDTO>> = _messages
 
-    fun setChat(chat: ChatDTO) {
-        _chat.postValue(chat)
+    fun setPost(post: PostDTO) {
+        _post.postValue(post)
     }
 
-    fun setMessages(chatId: String) {
+    fun setMessages(postId: String) {
 
         val apiCall =
             RestUtil.createService(
                 MessageService::class.java,
                 PreferenceManager.getPreference(PreferenceEnum.TOKEN)
-            ).getMessages(chatId)
+            ).getMessages(postId, PreferenceManager.getPreference(PreferenceEnum.CURRENT_USER_ID))
 
         changeVisibility(View.VISIBLE)
 
@@ -77,7 +81,7 @@ class MessagesViewModel : BaseViewModel() {
 
     fun sendMessage(text: String) {
 
-        val message = MessageDTO(text, _chat.value!!)
+        val message = MessageDTO(text, ChatDTO(post.value!!))
 
         val apiCall =
             RestUtil.createService(
@@ -115,9 +119,11 @@ class MessagesViewModel : BaseViewModel() {
     }
 
     fun addMessage(messageDTO: MessageDTO) {
-        val newMessages: MutableList<MessageDTO> = mutableListOf()
-        newMessages.add(messageDTO)
-        _messages.value!!.forEach { newMessages.add(it) }
-        _messages.postValue(newMessages)
+        if(messageDTO.chat.user?.id == PreferenceManager.getPreference(PreferenceEnum.CURRENT_USER_ID)) {
+            val newMessages: MutableList<MessageDTO> = mutableListOf()
+            newMessages.add(messageDTO)
+            _messages.value!!.forEach { newMessages.add(it) }
+            _messages.postValue(newMessages)
+        }
     }
 }

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.mcecelja.pocket.R
 import com.mcecelja.pocket.data.dto.users.RegisterRequestDTO
+import com.mcecelja.pocket.data.dto.users.RoleDTO
 import com.mcecelja.pocket.databinding.FragmentRegisterBinding
 
 class RegisterFragment : Fragment() {
@@ -44,7 +45,8 @@ class RegisterFragment : Fragment() {
             binding.etSurname.text.toString(),
             binding.etUsername.text.toString(),
             binding.etPassword.text.toString(),
-            binding.etPasswordConfirm.text.toString()
+            binding.etPasswordConfirm.text.toString(),
+            RoleDTO("3", "STUDENT")
         )
 
         loadingViewModel.registerUser(registerRequestDTO)

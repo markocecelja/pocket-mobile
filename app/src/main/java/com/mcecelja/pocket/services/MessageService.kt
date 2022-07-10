@@ -12,7 +12,7 @@ import retrofit2.http.Query
 interface MessageService {
 
     @GET("messages")
-    fun getMessages(@Query("chatId") chatId: String?): Call<ResponseMessage<Page<MessageDTO>>>
+    fun getMessages(@Query("postId") postId: String?, @Query("userId") userId: String?): Call<ResponseMessage<Page<MessageDTO>>>
 
     @POST("messages")
     fun createMessage(@Body messageDTO: MessageDTO): Call<ResponseMessage<MessageDTO>>

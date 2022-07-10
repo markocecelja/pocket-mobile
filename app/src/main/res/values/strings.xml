@@ -18,4 +18,5 @@
     <string name="iv_post_description">Post icon</string>
     <string name="et_search_hint">Upišite tekst za pretraživanje</string>
     <string name="til_category_hint">Izaberite kategoriju</string>
+    <string name="mb_contact_text">Kontaktirajte oglašivača</string>
 </resources>

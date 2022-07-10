@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.textfield.TextInputLayout
 import com.mcecelja.pocket.R
 import com.mcecelja.pocket.adapters.posts.PostAdapter
+import com.mcecelja.pocket.data.dto.post.PostDTO
 import com.mcecelja.pocket.databinding.FragmentPostsBinding
+import com.mcecelja.pocket.listener.PostItemClickListener
+import com.mcecelja.pocket.ui.post.PostFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PostsFragment : Fragment() {
+class PostsFragment : Fragment(), PostItemClickListener {
 
     private lateinit var postsFragmentBinding: FragmentPostsBinding
 
@@ -69,6 +72,11 @@ class PostsFragment : Fragment() {
         return postsFragmentBinding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        postsViewModel.setPosts()
+    }
+
     private fun setupRecyclerView() {
         postsFragmentBinding.rvPosts.layoutManager = LinearLayoutManager(
             context,
@@ -77,9 +85,19 @@ class PostsFragment : Fragment() {
         )
 
         postsFragmentBinding.rvPosts.adapter =
-            PostAdapter(postsViewModel.posts.value ?: mutableListOf())
+            PostAdapter(postsViewModel.posts.value ?: mutableListOf(), this)
     }
 
+    override fun onPostClicked(post: PostDTO) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.fl_fragmentContainer,
+                PostFragment.create(post),
+                PostFragment.TAG
+            )
+            .addToBackStack(PostFragment.TAG)
+            .commit()
+    }
 
     companion object {
         const val TAG = "Posts"

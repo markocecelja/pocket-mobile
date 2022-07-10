@@ -37,6 +37,11 @@ class ChatFragment : Fragment(), ChatItemClickListener {
         return chatFragmentBinding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        chatViewModel.setChats()
+    }
+
     private fun setupRecyclerView() {
         chatFragmentBinding.rvChats.layoutManager = LinearLayoutManager(
             context,
@@ -52,7 +57,7 @@ class ChatFragment : Fragment(), ChatItemClickListener {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(
                 R.id.fl_fragmentContainer,
-                MessagesFragment.create(chat),
+                MessagesFragment.create(chat.post),
                 MessagesFragment.TAG
             )
             .addToBackStack(TAG)

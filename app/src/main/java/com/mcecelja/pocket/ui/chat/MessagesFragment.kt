@@ -1,6 +1,7 @@
 package com.mcecelja.pocket.ui.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.mcecelja.pocket.adapters.chat.MessageAdapter
-import com.mcecelja.pocket.data.dto.chat.ChatDTO
 import com.mcecelja.pocket.data.dto.chat.MessageDTO
+import com.mcecelja.pocket.data.dto.post.PostDTO
 import com.mcecelja.pocket.databinding.FragmentMessagesBinding
+import com.mcecelja.pocket.enums.EnvironmentEnum
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
@@ -38,22 +40,26 @@ class MessagesFragment : Fragment() {
             viewLifecycleOwner,
             { (messagesFragmentBinding.rvMessages.adapter as MessageAdapter).refreshData(it) })
 
-        messagesViewModel.chat.observe(
+        messagesViewModel.post.observe(
             viewLifecycleOwner,
             { messagesViewModel.setMessages(it.id) })
 
-        val chat = arguments?.getSerializable(KEY_CHAT) as ChatDTO
-        chat.let {
-            messagesViewModel.setChat(chat)
+        val post = arguments?.getSerializable(KEY_POST) as PostDTO
+        post.let {
+            messagesViewModel.setPost(post)
         }
 
         messagesFragmentBinding.ibSend.setOnClickListener { sendMessage() }
 
-        stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://192.168.36.14:8443/chat")
+        stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, EnvironmentEnum.SOCKET.url)
         stompClient.connect()
 
-        stompClient.topic("/topic/messages").subscribe {
-            messagesViewModel.addMessage(gson.fromJson(it.payload, MessageDTO::class.java))
+        stompClient.topic("/topic/messages").doOnError {
+            Log.e("Socket error", "${it.message}")
+        }.subscribe {
+            messagesViewModel.addMessage(
+                gson.fromJson(it.payload, MessageDTO::class.java)
+            )
         }
 
         return messagesFragmentBinding.root
@@ -72,11 +78,11 @@ class MessagesFragment : Fragment() {
 
     companion object {
         const val TAG = "Messages"
-        private const val KEY_CHAT = "chat"
+        private const val KEY_POST = "post"
 
-        fun create(chat: ChatDTO): MessagesFragment {
+        fun create(post: PostDTO): MessagesFragment {
             val args = Bundle()
-            args.putSerializable(KEY_CHAT, chat)
+            args.putSerializable(KEY_POST, post)
 
             val fragment = MessagesFragment()
             fragment.arguments = args

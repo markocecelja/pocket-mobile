@@ -10,6 +10,7 @@ import com.mcecelja.pocket.R
 import com.mcecelja.pocket.data.PreferenceManager
 import com.mcecelja.pocket.databinding.ActivityPocketBinding
 import com.mcecelja.pocket.enums.PreferenceEnum
+import com.mcecelja.pocket.enums.RoleEnum
 import com.mcecelja.pocket.ui.login.LoginActivity
 import com.mcecelja.pocket.utils.ErrorUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -31,7 +32,12 @@ class PocketActivity : AppCompatActivity() {
 
         pocketViewModel.user.observe(
             this,
-            { PreferenceManager.savePreference(PreferenceEnum.CURRENT_USER_ID, it.id) })
+            {
+                if(it.roles.none { role -> role.id == RoleEnum.STUDENT.id }) {
+                    logOut()
+                }
+                PreferenceManager.savePreference(PreferenceEnum.CURRENT_USER_ID, it.id)
+            })
 
         pocketViewModel.loadingVisibility.observe(
             this,

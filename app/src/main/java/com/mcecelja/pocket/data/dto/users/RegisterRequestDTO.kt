@@ -5,5 +5,6 @@ data class RegisterRequestDTO(
     val lastName: String,
     val username: String,
     val password: String,
-    val confirmationPassword: String
+    val confirmationPassword: String,
+    val role: RoleDTO
 )

@@ -5,8 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mcecelja.pocket.R
 import com.mcecelja.pocket.data.dto.post.PostDTO
+import com.mcecelja.pocket.listener.PostItemClickListener
 
-class PostAdapter(posts: List<PostDTO>) : RecyclerView.Adapter<PostViewHolder>() {
+class PostAdapter(posts: List<PostDTO>, private val postItemClickListener: PostItemClickListener) : RecyclerView.Adapter<PostViewHolder>() {
 
     private val posts: MutableList<PostDTO> = mutableListOf()
 
@@ -29,8 +30,7 @@ class PostAdapter(posts: List<PostDTO>) : RecyclerView.Adapter<PostViewHolder>()
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
-        holder.bind(post)
-
+        holder.bind(post, postItemClickListener)
     }
 
     override fun getItemCount(): Int {
